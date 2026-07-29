@@ -4,40 +4,22 @@ import ToolCallHeader from './ToolCallHeader.astro';
 import ProjectEntry from './ProjectEntry.astro';
 
 const spotlight = projects.find((p) => p.layout === 'spotlight')!;
-const paired = projects.filter((p) => p.layout === 'default');
-const wide = projects.filter((p) => p.layout === 'wide');
 ---
 
 <section id="step2" class="step" aria-labelledby="step2-heading">
   <ToolCallHeader call={spotlight.call!} status={spotlight.status!} />
   <h2 id="step2-heading" class="sr-only">Projects</h2>
-  <div class="list">
-    <ProjectEntry
-      title={spotlight.title}
-      description={spotlight.description}
-      stack={spotlight.stack}
-      badge={spotlight.badge}
-      layout="spotlight"
-    />
-    <div class="pair">
-      {
-        paired.map((project) => (
-          <ProjectEntry
-            title={project.title}
-            description={project.description}
-            stack={project.stack}
-            layout="default"
-          />
-        ))
-      }
-    </div>
+  <div class="grid">
     {
-      wide.map((project) => (
+      projects.map((project) => (
         <ProjectEntry
           title={project.title}
           description={project.description}
           stack={project.stack}
-          layout="wide"
+          badge={project.badge}
+          repo={project.repo}
+          demo={project.demo}
+          layout={project.layout}
         />
       ))
     }
@@ -62,20 +44,14 @@ const wide = projects.filter((p) => p.layout === 'wide');
     border: 0;
   }
 
-  .list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .pair {
+  .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
   }
 
   @media (max-width: 640px) {
-    .pair {
+    .grid {
       grid-template-columns: 1fr;
     }
   }
