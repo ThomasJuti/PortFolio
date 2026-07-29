@@ -26,8 +26,6 @@ pnpm-debug.log*
 # AI agents / assistants tooling
 .claude/
 .atl/
-.cursor/
-.windsurf/
 .codegraph/
 AGENTS.md
 CLAUDE.md
