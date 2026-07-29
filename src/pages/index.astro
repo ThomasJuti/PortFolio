@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AgentSidebar from '../components/agent-trace/AgentSidebar.astro';
+import UserQuery from '../components/agent-trace/UserQuery.astro';
+import ProfileStep from '../components/agent-trace/ProfileStep.astro';
+import ProjectsStep from '../components/agent-trace/ProjectsStep.astro';
+import SkillsStep from '../components/agent-trace/SkillsStep.astro';
+import WinsStep from '../components/agent-trace/WinsStep.astro';
+import RecommendationStep from '../components/agent-trace/RecommendationStep.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout title={`${site.name} — Fullstack Developer`} description={site.description}>
+  <div class="layout">
+    <AgentSidebar />
+    <main id="main">
+      <UserQuery />
+      <ProfileStep />
+      <ProjectsStep />
+      <SkillsStep />
+      <WinsStep />
+      <RecommendationStep />
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .layout {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    min-height: 100vh;
+  }
+
+  main {
+    padding: 48px var(--gutter) 80px;
+    max-width: var(--content-max);
+  }
+
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
