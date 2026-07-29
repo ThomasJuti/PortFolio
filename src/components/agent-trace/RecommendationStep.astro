@@ -1,7 +1,8 @@
 ---
-import { recommendation, site } from '../../data/site';
+import { audiences, recommendation, site } from '../../data/site';
 import ToolCallHeader from './ToolCallHeader.astro';
 
+const current = audiences[0];
 const year = new Date().getFullYear();
 ---
 
@@ -9,11 +10,11 @@ const year = new Date().getFullYear();
   <ToolCallHeader call={recommendation.call} variant="final" />
   <div class="card">
     <h2 id="step5-heading">
-      {recommendation.headline} <span class="accent">{recommendation.headlineAccent}</span>
+      {recommendation.headline} <span class="accent" id="rec-accent">{current.accent}</span>
     </h2>
-    <p class="body">{recommendation.body}</p>
+    <p class="body" id="rec-body">{current.body}</p>
     <div class="actions">
-      <a class="btn-primary" href={`mailto:${site.email}`}>Email Thomas →</a>
+      <a class="btn-primary" href={`mailto:${site.email}`} id="rec-cta">{current.cta}</a>
       <a class="btn-secondary" href={site.github} target="_blank" rel="noopener noreferrer"
         >GitHub ↗</a
       >

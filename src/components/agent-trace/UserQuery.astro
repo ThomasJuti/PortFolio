@@ -1,11 +1,13 @@
 ---
-import { query } from '../../data/site';
+import { audiences } from '../../data/site';
+
+const current = audiences[0];
 ---
 
 <div class="query">
-  <p class="from">{query.from}</p>
+  <p class="from" id="query-from">{current.from}</p>
   <p class="bubble">
-    {query.text}<span class="cursor" aria-hidden="true">▌</span>
+    <span id="query-text">{current.query}</span><span class="cursor" aria-hidden="true">▌</span>
   </p>
 </div>
 

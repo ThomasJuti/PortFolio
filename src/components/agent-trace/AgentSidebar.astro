@@ -1,5 +1,7 @@
 ---
-import { agent, traceSteps } from '../../data/site';
+import { agent, audiences, traceSteps } from '../../data/site';
+
+const current = audiences[0];
 ---
 
 <header class="sidebar">
@@ -8,10 +10,34 @@ import { agent, traceSteps } from '../../data/site';
     <span class="agent-name">agent: {agent.name}</span>
   </div>
 
+  <div class="viewing-as" role="group" aria-label="Viewing as">
+    <p class="comment" aria-hidden="true">// viewing as</p>
+    <div class="toggle">
+      {
+        audiences.map((audience) => (
+          <button
+            type="button"
+            data-audience={audience.id}
+            data-from={audience.from}
+            data-task={audience.task}
+            data-filters={audience.filters}
+            data-query={audience.query}
+            data-accent={audience.accent}
+            data-body={audience.body}
+            data-cta={audience.cta}
+            aria-pressed={audience.id === current.id ? 'true' : 'false'}
+          >
+            {audience.label}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
   <dl class="session">
     <p class="comment" aria-hidden="true">// session</p>
-    <div class="row"><dt>task:</dt> <dd>{agent.session.task}</dd></div>
-    <div class="row"><dt>filters:</dt> <dd>{agent.session.filters}</dd></div>
+    <div class="row"><dt>task:</dt> <dd id="session-task">{current.task}</dd></div>
+    <div class="row"><dt>filters:</dt> <dd id="session-filters">{current.filters}</dd></div>
     <div class="row"><dt>region:</dt> <dd>{agent.session.region}</dd></div>
     <div class="row">
       <dt>status:</dt> <dd class="status-ok">● {agent.session.status}</dd>
@@ -37,6 +63,93 @@ import { agent, traceSteps } from '../../data/site';
     <div><dt>model:</dt> <dd>{agent.model}</dd></div>
   </dl>
 </header>
+
+<script>
+  const STORAGE_KEY = 'thomas-portfolio:audience';
+
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-audience]');
+  const fromEl = document.getElementById('query-from');
+  const taskEl = document.getElementById('session-task');
+  const filtersEl = document.getElementById('session-filters');
+  const queryEl = document.getElementById('query-text');
+  const accentEl = document.getElementById('rec-accent');
+  const bodyEl = document.getElementById('rec-body');
+  const ctaEl = document.getElementById('rec-cta');
+
+  function applyAudience(button: HTMLButtonElement) {
+    buttons.forEach((other) => other.setAttribute('aria-pressed', String(other === button)));
+
+    const { from, task, filters, query, accent, body, cta } = button.dataset;
+    if (fromEl && from) fromEl.textContent = from;
+    if (taskEl && task) taskEl.textContent = task;
+    if (filtersEl && filters) filtersEl.textContent = filters;
+    if (queryEl && query) queryEl.textContent = query;
+    if (accentEl && accent) accentEl.textContent = accent;
+    if (bodyEl && body) bodyEl.textContent = body;
+    if (ctaEl && cta) ctaEl.textContent = cta;
+  }
+
+  function persistAudience(id: string) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('as', id);
+    window.history.replaceState({}, '', url);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, id);
+    } catch {
+      // storage may be unavailable (private mode) — persisting is a nice-to-have
+    }
+  }
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      applyAudience(button);
+      if (button.dataset.audience) persistAudience(button.dataset.audience);
+    });
+  });
+
+  // Restore a shared (?as=) or previously-chosen audience on load.
+  let initialId = new URLSearchParams(window.location.search).get('as');
+  if (!initialId) {
+    try {
+      initialId = window.localStorage.getItem(STORAGE_KEY);
+    } catch {
+      initialId = null;
+    }
+  }
+  if (initialId) {
+    const match = Array.from(buttons).find((b) => b.dataset.audience === initialId);
+    if (match) {
+      if (match.getAttribute('aria-pressed') !== 'true') applyAudience(match);
+      persistAudience(initialId);
+    }
+  }
+
+  // Highlight the trace-step link for whichever step is currently in view.
+  const traceLinks = new Map<string, HTMLAnchorElement>();
+  document
+    .querySelectorAll<HTMLAnchorElement>('nav[aria-label="Trace steps"] a')
+    .forEach((link) => {
+      const id = link.getAttribute('href')?.slice(1);
+      if (id) traceLinks.set(id, link);
+    });
+
+  const stepObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const link = traceLinks.get(entry.target.id);
+        if (!link) return;
+        link.classList.toggle('active', entry.isIntersecting);
+        link.toggleAttribute('aria-current', entry.isIntersecting);
+      });
+    },
+    { rootMargin: '-40% 0px -50% 0px' }
+  );
+
+  traceLinks.forEach((_link, id) => {
+    const section = document.getElementById(id);
+    if (section) stepObserver.observe(section);
+  });
+</script>
 
 <style>
   .sidebar {
@@ -74,6 +187,35 @@ import { agent, traceSteps } from '../../data/site';
     color: var(--color-text-faint);
     font-size: 12px;
     margin: 0 0 8px;
+  }
+
+  .toggle {
+    display: flex;
+    gap: 4px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 3px;
+  }
+
+  .toggle button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-radius: 5px;
+    color: var(--color-text-dim);
+    font: 500 12px var(--font-mono);
+    padding: 7px 8px;
+    cursor: pointer;
+  }
+
+  .toggle button:hover {
+    color: var(--color-text);
+  }
+
+  .toggle button[aria-pressed='true'] {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    font-weight: 700;
   }
 
   .session {
@@ -123,6 +265,11 @@ import { agent, traceSteps } from '../../data/site';
 
   nav a:hover,
   nav a:focus-visible {
+    background: var(--color-surface-alt);
+    color: var(--color-accent);
+  }
+
+  nav a.active {
     background: var(--color-surface-alt);
     color: var(--color-accent);
   }
