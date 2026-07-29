@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- transparent canvas; glyphs fill most of the icon for tab readability -->
+  <text
+    x="32"
+    y="42"
+    text-anchor="middle"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+    font-size="28"
+    font-weight="700"
+    letter-spacing="-0.06em"
+  >
+    <tspan fill="#C4A9F9">&gt;_</tspan><tspan fill="#E9E5F1">tj</tspan>
+  </text>
+</svg>
