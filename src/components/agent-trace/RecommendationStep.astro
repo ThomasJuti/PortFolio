@@ -1,0 +1,100 @@
+---
+import { recommendation, site } from '../../data/site';
+import ToolCallHeader from './ToolCallHeader.astro';
+
+const year = new Date().getFullYear();
+---
+
+<section id="step5" class="step" aria-labelledby="step5-heading">
+  <ToolCallHeader call={recommendation.call} variant="final" />
+  <div class="card">
+    <h2 id="step5-heading">
+      {recommendation.headline} <span class="accent">{recommendation.headlineAccent}</span>
+    </h2>
+    <p class="body">{recommendation.body}</p>
+    <div class="actions">
+      <a class="btn-primary" href={`mailto:${site.email}`}>Email Thomas →</a>
+      <a class="btn-secondary" href={site.github} target="_blank" rel="noopener noreferrer"
+        >GitHub ↗</a
+      >
+      <a class="btn-secondary" href={site.linkedin} target="_blank" rel="noopener noreferrer"
+        >LinkedIn ↗</a
+      >
+    </div>
+  </div>
+  <p class="fine-print">© {year} thomas jutinico · this portfolio is itself an agent trace 🤖</p>
+</section>
+
+<style>
+  .step {
+    animation: rise 0.6s 0.5s ease both;
+  }
+
+  .card {
+    border: 1px solid var(--color-accent);
+    border-radius: 14px;
+    padding: 40px 44px;
+    background: var(--color-surface-gradient);
+    text-align: center;
+  }
+
+  h2 {
+    font: 700 34px var(--font-sans);
+    letter-spacing: -1px;
+    margin: 0 0 10px;
+  }
+
+  .accent {
+    color: var(--color-accent);
+  }
+
+  .body {
+    margin: 0 auto 26px;
+    font: 400 16px/1.7 var(--font-sans);
+    color: var(--color-text-muted);
+    max-width: 520px;
+  }
+
+  .actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    font: 700 15px var(--font-sans);
+    padding: 14px 30px;
+    border-radius: 8px;
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  .btn-primary:hover {
+    background: var(--color-accent-hover);
+    color: var(--color-on-accent);
+  }
+
+  .btn-secondary {
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .fine-print {
+    text-align: center;
+    margin-top: 36px;
+    font-size: 11px;
+    color: var(--color-text-faint);
+  }
+</style>

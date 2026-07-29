@@ -1,0 +1,163 @@
+---
+import { agent, traceSteps } from '../../data/site';
+---
+
+<header class="sidebar">
+  <div class="status">
+    <span class="dot" aria-hidden="true"></span>
+    <span class="agent-name">agent: {agent.name}</span>
+  </div>
+
+  <dl class="session">
+    <p class="comment" aria-hidden="true">// session</p>
+    <div class="row"><dt>task:</dt> <dd>{agent.session.task}</dd></div>
+    <div class="row"><dt>filters:</dt> <dd>{agent.session.filters}</dd></div>
+    <div class="row"><dt>region:</dt> <dd>{agent.session.region}</dd></div>
+    <div class="row">
+      <dt>status:</dt> <dd class="status-ok">● {agent.session.status}</dd>
+    </div>
+  </dl>
+
+  <nav aria-label="Trace steps">
+    <p class="comment" aria-hidden="true">// trace steps</p>
+    <ol>
+      {
+        traceSteps.map((step) => (
+          <li>
+            <a href={`#${step.id}`}>{step.label}</a>
+          </li>
+        ))
+      }
+    </ol>
+  </nav>
+
+  <dl class="meta">
+    <div><dt>tokens used:</dt> <dd>{agent.tokensUsed}</dd></div>
+    <div><dt>latency:</dt> <dd>{agent.latency}</dd></div>
+    <div><dt>model:</dt> <dd>{agent.model}</dd></div>
+  </dl>
+</header>
+
+<style>
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid var(--color-border);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    animation: pulse 1.6s ease infinite;
+  }
+
+  .agent-name {
+    font: 700 14px var(--font-mono);
+    color: var(--color-accent);
+  }
+
+  .comment {
+    color: var(--color-text-faint);
+    font-size: 12px;
+    margin: 0 0 8px;
+  }
+
+  .session {
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 12px;
+    line-height: 1.9;
+    color: var(--color-text-dim);
+    margin: 0;
+  }
+
+  .session .row {
+    display: flex;
+    gap: 6px;
+  }
+
+  .session dt {
+    font-weight: 400;
+  }
+
+  .session dd {
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .status-ok {
+    color: var(--color-success) !important;
+  }
+
+  nav ol {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 13px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav a {
+    display: block;
+    padding: 9px 12px;
+    border-radius: 6px;
+    color: var(--color-text-dim);
+  }
+
+  nav a:hover,
+  nav a:focus-visible {
+    background: var(--color-surface-alt);
+    color: var(--color-accent);
+  }
+
+  .meta {
+    margin-top: auto;
+    font-size: 11px;
+    color: var(--color-text-faint);
+    line-height: 1.8;
+  }
+
+  .meta div {
+    display: flex;
+    gap: 4px;
+  }
+
+  .meta dd {
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    .sidebar {
+      position: static !important;
+      height: auto !important;
+      border-right: none;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    nav ol {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .meta {
+      margin-top: 0;
+    }
+  }
+</style>
