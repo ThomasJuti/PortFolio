@@ -30,4 +30,5 @@ pnpm-debug.log*
 AGENTS.md
 CLAUDE.md
 .claude.json
+.impeccable/
 

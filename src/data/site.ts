@@ -70,7 +70,7 @@ export const profile = {
   call: 'fetch_profile("thomas-jutinico")',
   status: '200 OK',
   tagline: 'fullstack developer · AI agent builder · bogotá, co',
-  bio: "Systems engineering student (8th semester, U. Libre) who goes looking for the hard technical problems: hexagonal architecture on AWS, infrastructure as code, and AI-assisted PR review pipelines. 6 months shipping internal banking apps at Banco de Bogotá, plus a LATAM hackathon win with an AI voice-agent platform.",
+  bio: "Systems engineering student (8th semester, U. Libre) who goes looking for the hard technical problems: hexagonal architecture on AWS, infrastructure as code, and AI-assisted PR review pipelines. Currently shipping internal banking apps at Banco de Bogotá, plus a LATAM hackathon win with an AI voice-agent platform.",
 } as const;
 
 export const projects = [

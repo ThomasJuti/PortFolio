@@ -7,7 +7,11 @@ const spotlight = projects.find((p) => p.layout === 'spotlight')!;
 ---
 
 <section id="step2" class="step" aria-labelledby="step2-heading">
-  <ToolCallHeader call={spotlight.call!} status={spotlight.status!} />
+  <ToolCallHeader
+    call={spotlight.call!}
+    status={spotlight.status!}
+    plainLabel="sorting projects by impact"
+  />
   <h2 id="step2-heading" class="sr-only">Projects</h2>
   <div class="grid">
     {

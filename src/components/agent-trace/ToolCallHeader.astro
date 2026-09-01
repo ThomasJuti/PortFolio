@@ -3,14 +3,15 @@ interface Props {
   call: string;
   status?: string;
   variant?: 'tool' | 'final';
+  plainLabel?: string;
 }
 
-const { call, status, variant = 'tool' } = Astro.props;
+const { call, status, variant = 'tool', plainLabel } = Astro.props;
 ---
 
 <div class="header">
   <span class:list={['badge', variant]}>{variant === 'final' ? 'FINAL ANSWER' : 'TOOL CALL'}</span>
-  <span class="call">{call}</span>
+  <span class="call" title={plainLabel} aria-label={plainLabel ?? call}>{call}</span>
   {status && <span class="status">✓ {status}</span>}
 </div>
 
@@ -41,6 +42,8 @@ const { call, status, variant = 'tool' } = Astro.props;
   .call {
     font-size: 13px;
     color: var(--color-accent);
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
 
   .status {

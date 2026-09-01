@@ -9,6 +9,7 @@ const current = audiences[0];
     <span class="dot" aria-hidden="true"></span>
     <span class="agent-name">agent: {agent.name}</span>
   </div>
+  <p class="sr-only" id="audience-announcer" role="status" aria-live="polite"></p>
 
   <div class="viewing-as" role="group" aria-label="Viewing as">
     <p class="comment" aria-hidden="true">// viewing as</p>
@@ -75,8 +76,17 @@ const current = audiences[0];
   const accentEl = document.getElementById('rec-accent');
   const bodyEl = document.getElementById('rec-body');
   const ctaEl = document.getElementById('rec-cta');
+  const announcerEl = document.getElementById('audience-announcer');
 
-  function applyAudience(button: HTMLButtonElement) {
+  function flash(el: HTMLElement | null) {
+    if (!el) return;
+    el.classList.remove('swap-flash');
+    // Force reflow so the animation restarts if triggered again quickly.
+    void el.offsetWidth;
+    el.classList.add('swap-flash');
+  }
+
+  function applyAudience(button: HTMLButtonElement, announce = true) {
     buttons.forEach((other) => other.setAttribute('aria-pressed', String(other === button)));
 
     const { from, task, filters, query, accent, body, cta } = button.dataset;
@@ -87,6 +97,11 @@ const current = audiences[0];
     if (accentEl && accent) accentEl.textContent = accent;
     if (bodyEl && body) bodyEl.textContent = body;
     if (ctaEl && cta) ctaEl.textContent = cta;
+
+    if (announce) {
+      [fromEl, taskEl, filtersEl, queryEl, accentEl, bodyEl, ctaEl].forEach(flash);
+      if (announcerEl) announcerEl.textContent = `Now viewing as: ${button.textContent?.trim()}`;
+    }
   }
 
   function persistAudience(id: string) {
@@ -119,7 +134,7 @@ const current = audiences[0];
   if (initialId) {
     const match = Array.from(buttons).find((b) => b.dataset.audience === initialId);
     if (match) {
-      if (match.getAttribute('aria-pressed') !== 'true') applyAudience(match);
+      if (match.getAttribute('aria-pressed') !== 'true') applyAudience(match, false);
       persistAudience(initialId);
     }
   }
@@ -187,6 +202,18 @@ const current = audiences[0];
     color: var(--color-text-faint);
     font-size: 12px;
     margin: 0 0 8px;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   .toggle {

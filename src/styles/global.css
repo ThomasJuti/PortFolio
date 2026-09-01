@@ -14,7 +14,7 @@
   --color-text: #e9e5f2;
   --color-text-muted: #b3aac6;
   --color-text-dim: #8f86a3;
-  --color-text-faint: #5a5470;
+  --color-text-faint: #7a7390;
   --color-accent: #c9a8ff;
   --color-accent-hover: #e2d1ff;
   --color-on-accent: #000000;
@@ -33,7 +33,7 @@
 
 html {
   scroll-behavior: smooth;
-  zoom: 1.15;
+  font-size: 115%;
 }
 
 body {
@@ -112,6 +112,19 @@ img {
   50% {
     opacity: 1;
   }
+}
+
+@keyframes swap-flash {
+  0% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.swap-flash {
+  animation: swap-flash 0.3s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
