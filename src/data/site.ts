@@ -9,9 +9,6 @@ export const site = {
 
 export const agent = {
   name: 'match-copilot',
-  model: 'thomas-v1.0',
-  tokensUsed: '42,010',
-  latency: '8 semesters',
   session: {
     region: 'LATAM',
     status: 'match found',

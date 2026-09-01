@@ -58,11 +58,19 @@ const current = audiences[0];
     </ol>
   </nav>
 
-  <dl class="meta">
-    <div><dt>tokens used:</dt> <dd>{agent.tokensUsed}</dd></div>
-    <div><dt>latency:</dt> <dd>{agent.latency}</dd></div>
-    <div><dt>model:</dt> <dd>{agent.model}</dd></div>
-  </dl>
+  <div class="context-group">
+    <div class="context">
+      <div class="context-label">
+        <span>context</span>
+        <span id="context-count">{Math.round((1 / traceSteps.length) * 100)}%</span>
+      </div>
+      <div class="context-track" role="progressbar" aria-label="Sections read" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20">
+        <div class="context-fill" id="context-fill"></div>
+      </div>
+    </div>
+
+    <p class="comment raw-data-hint">// press ` for raw data</p>
+  </div>
 </header>
 
 <script>
@@ -148,6 +156,22 @@ const current = audiences[0];
       if (id) traceLinks.set(id, link);
     });
 
+  const stepIds = Array.from(traceLinks.keys());
+  const contextFillEl = document.getElementById('context-fill');
+  const contextCountEl = document.getElementById('context-count');
+  const contextTrackEl = document.querySelector<HTMLElement>('.context-track');
+  let furthestStepIndex = 0;
+
+  function updateContextBar(index: number) {
+    if (index <= furthestStepIndex) return;
+    furthestStepIndex = index;
+    const total = stepIds.length;
+    const pct = Math.round(((index + 1) / total) * 100);
+    if (contextFillEl) contextFillEl.style.width = `${pct}%`;
+    if (contextCountEl) contextCountEl.textContent = `${pct}%`;
+    contextTrackEl?.setAttribute('aria-valuenow', String(pct));
+  }
+
   const stepObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -155,6 +179,10 @@ const current = audiences[0];
         if (!link) return;
         link.classList.toggle('active', entry.isIntersecting);
         link.toggleAttribute('aria-current', entry.isIntersecting);
+        if (entry.isIntersecting) {
+          const index = stepIds.indexOf(entry.target.id);
+          if (index !== -1) updateContextBar(index);
+        }
       });
     },
     { rootMargin: '-40% 0px -50% 0px' }
@@ -176,7 +204,7 @@ const current = audiences[0];
     padding: 28px 24px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 18px;
   }
 
   .status {
@@ -201,7 +229,7 @@ const current = audiences[0];
   .comment {
     color: var(--color-text-faint);
     font-size: 12px;
-    margin: 0 0 8px;
+    margin: 0 0 6px;
   }
 
   .sr-only {
@@ -231,7 +259,7 @@ const current = audiences[0];
     border-radius: 5px;
     color: var(--color-text-dim);
     font: 500 12px var(--font-mono);
-    padding: 7px 8px;
+    padding: 6px 8px;
     cursor: pointer;
   }
 
@@ -248,9 +276,9 @@ const current = audiences[0];
   .session {
     border: 1px solid var(--color-border);
     border-radius: 10px;
-    padding: 16px;
+    padding: 12px 14px;
     font-size: 12px;
-    line-height: 1.9;
+    line-height: 1.7;
     color: var(--color-text-dim);
     margin: 0;
   }
@@ -285,7 +313,7 @@ const current = audiences[0];
 
   nav a {
     display: block;
-    padding: 9px 12px;
+    padding: 7px 10px;
     border-radius: 6px;
     color: var(--color-text-dim);
   }
@@ -301,19 +329,43 @@ const current = audiences[0];
     color: var(--color-accent);
   }
 
-  .meta {
+  .context-group {
     margin-top: auto;
-    font-size: 11px;
-    color: var(--color-text-faint);
-    line-height: 1.8;
-  }
-
-  .meta div {
     display: flex;
-    gap: 4px;
+    flex-direction: column;
+    gap: 10px;
   }
 
-  .meta dd {
+  .context {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .context-label {
+    display: flex;
+    justify-content: space-between;
+    font: 500 11px var(--font-mono);
+    color: var(--color-text-faint);
+  }
+
+  .context-track {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--color-border);
+    overflow: hidden;
+  }
+
+  .context-fill {
+    height: 100%;
+    width: 20%;
+    background: var(--color-accent);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .raw-data-hint {
+    font-size: 11px;
     margin: 0;
   }
 
@@ -328,10 +380,6 @@ const current = audiences[0];
     nav ol {
       flex-direction: row;
       flex-wrap: wrap;
-    }
-
-    .meta {
-      margin-top: 0;
     }
   }
 </style>
