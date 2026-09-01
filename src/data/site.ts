@@ -156,13 +156,20 @@ export const skills = {
 
 export const wins = {
   call: 'verify_wins()',
-  status: '2 verified',
+  status: '3 verified',
   items: [
     {
       emoji: '🏆',
       title: '1st Place — GTM Hackathon LATAM',
       description:
         "May 2026 — won LATAM's first GTM hackathon with GoTom, against teams from across the region.",
+      highlighted: true,
+    },
+    {
+      emoji: '🥈',
+      title: 'Top 2 — Banco de Bogotá Hackathon',
+      description:
+        'Jul 2026 — built Banca Empresas, an AI-voice-driven sales pipeline for corporate credit cards, from file matching to delivery follow-up.',
       highlighted: true,
     },
     {
