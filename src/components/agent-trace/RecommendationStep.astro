@@ -7,8 +7,24 @@ const year = new Date().getFullYear();
 ---
 
 <section id="step5" class="step" aria-labelledby="step5-heading">
-  <ToolCallHeader call={recommendation.call} variant="final" plainLabel="making the call" />
+  <ToolCallHeader
+    call={recommendation.call}
+    variant="final"
+    plainLabel="making the call"
+    resolveDelay={0.5}
+  />
   <div class="card">
+    <ul class="reasoning" id="rec-reasoning" aria-hidden="true">
+      <li class="think-line">
+        checking production wins... <span class="check">✓</span>
+      </li>
+      <li class="think-line">
+        checking real deploys... <span class="check">✓</span>
+      </li>
+      <li class="think-line">
+        cross-referencing persona filters... <span class="check">✓</span>
+      </li>
+    </ul>
     <h2 id="step5-heading">
       {recommendation.headline} <span class="accent" id="rec-accent">{current.accent}</span>
     </h2>
@@ -60,6 +76,71 @@ const year = new Date().getFullYear();
   });
 </script>
 
+<script>
+  // Reasoning-then-stream reveal, played once the first time this section
+  // scrolls into view. Headline/body are hidden via opacity only (never their
+  // text content) so that if the visitor swaps persona via AgentSidebar
+  // before ever scrolling here, the body still reads its *live* text at
+  // stream time instead of a stale value captured on page load.
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const section = document.getElementById('step5');
+  const reasoningEl = document.getElementById('rec-reasoning');
+  const headlineEl = document.getElementById('step5-heading');
+  const bodyEl = document.getElementById('rec-body');
+
+  if (!prefersReducedMotion && section && reasoningEl && headlineEl && bodyEl) {
+    headlineEl.classList.add('pending-reveal');
+    bodyEl.classList.add('pending-reveal');
+
+    const lines = Array.from(reasoningEl.querySelectorAll<HTMLElement>('.think-line'));
+    const LINE_STAGGER_MS = 180;
+    const STREAM_SPEED_MS = 18;
+
+    function streamText(el: HTMLElement, text: string) {
+      let i = 0;
+      function tick() {
+        el.textContent = text.slice(0, i);
+        i++;
+        if (i <= text.length) window.setTimeout(tick, STREAM_SPEED_MS);
+      }
+      tick();
+    }
+
+    function playSequence() {
+      lines.forEach((line, i) => {
+        window.setTimeout(() => line.classList.add('shown'), i * LINE_STAGGER_MS);
+      });
+
+      const reasoningDone = lines.length * LINE_STAGGER_MS + 300;
+
+      window.setTimeout(() => {
+        headlineEl.classList.remove('pending-reveal');
+      }, reasoningDone);
+
+      window.setTimeout(() => {
+        const fullText = bodyEl.textContent ?? '';
+        bodyEl.textContent = '';
+        bodyEl.classList.remove('pending-reveal');
+        streamText(bodyEl, fullText);
+      }, reasoningDone + 250);
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            observer.disconnect();
+            playSequence();
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+    observer.observe(section);
+  }
+</script>
+
 <style>
   .step {
     animation: rise 0.6s 0.5s ease both;
@@ -73,10 +154,42 @@ const year = new Date().getFullYear();
     text-align: center;
   }
 
+  .reasoning {
+    list-style: none;
+    margin: 0 0 20px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .think-line {
+    font: 500 12px var(--font-mono);
+    color: var(--color-text-faint);
+    opacity: 0;
+    transform: translateY(4px);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .think-line.shown {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .think-line .check {
+    color: var(--color-success);
+  }
+
   h2 {
     font: 700 34px var(--font-sans);
     letter-spacing: -1px;
     margin: 0 0 10px;
+    transition:
+      opacity 0.4s ease,
+      transform 0.4s ease;
   }
 
   .accent {
@@ -88,6 +201,15 @@ const year = new Date().getFullYear();
     font: 400 16px/1.7 var(--font-sans);
     color: var(--color-text-muted);
     max-width: 520px;
+    min-height: 1.7em;
+    transition:
+      opacity 0.4s ease,
+      transform 0.4s ease;
+  }
+
+  .pending-reveal {
+    opacity: 0;
+    transform: translateY(6px);
   }
 
   .actions {

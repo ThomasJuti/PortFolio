@@ -6,7 +6,12 @@ import ToolCallHeader from './ToolCallHeader.astro';
 ---
 
 <section id="step1" class="step" aria-labelledby="step1-heading">
-  <ToolCallHeader call={profile.call} status={profile.status} plainLabel="loading profile" />
+  <ToolCallHeader
+    call={profile.call}
+    status={profile.status}
+    plainLabel="loading profile"
+    resolveDelay={0.1}
+  />
   <div class="card">
     <Image
       src={profileImage}

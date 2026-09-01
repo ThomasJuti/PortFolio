@@ -4,7 +4,12 @@ import ToolCallHeader from './ToolCallHeader.astro';
 ---
 
 <section id="step4" class="step" aria-labelledby="step4-heading">
-  <ToolCallHeader call={wins.call} status={wins.status} plainLabel="confirming actual wins, not claims" />
+  <ToolCallHeader
+    call={wins.call}
+    status={wins.status}
+    plainLabel="confirming actual wins, not claims"
+    resolveDelay={0.4}
+  />
   <h2 id="step4-heading" class="sr-only">Achievements</h2>
   <div class="grid">
     {

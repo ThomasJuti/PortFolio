@@ -4,16 +4,50 @@ interface Props {
   status?: string;
   variant?: 'tool' | 'final';
   plainLabel?: string;
+  resolveDelay?: number;
 }
 
-const { call, status, variant = 'tool', plainLabel } = Astro.props;
+const { call, status, variant = 'tool', plainLabel, resolveDelay } = Astro.props;
+const badgeText = variant === 'final' ? 'FINAL ANSWER' : 'TOOL CALL';
 ---
 
-<div class="header">
-  <span class:list={['badge', variant]}>{variant === 'final' ? 'FINAL ANSWER' : 'TOOL CALL'}</span>
+<div class="header" data-resolve-delay={resolveDelay}>
+  <span class:list={['badge', variant]} data-badge data-badge-text={badgeText}>{badgeText}</span>
   <span class="call" title={plainLabel} aria-label={plainLabel ?? call}>{call}</span>
-  {status && <span class="status">✓ {status}</span>}
+  {status && <span class="status" data-status>✓ {status}</span>}
 </div>
+
+<script>
+  // Simulate a real async call: sections with a resolve delay briefly show
+  // "CALLING" before flipping to their resolved state. Each .step section is
+  // invisible (opacity: 0, animation-fill-mode: both on the `rise` keyframe)
+  // until its own entrance delay elapses, so this swap always finishes before
+  // the section is ever painted — no flash of the resolved state first.
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const REVEAL_BUFFER_MS = 700; // .step rise animation is 0.6s + a small buffer
+
+  if (!prefersReducedMotion) {
+    document.querySelectorAll<HTMLElement>('[data-resolve-delay]').forEach((header) => {
+      const delaySeconds = parseFloat(header.dataset.resolveDelay ?? '');
+      if (Number.isNaN(delaySeconds)) return;
+
+      const badge = header.querySelector<HTMLElement>('[data-badge]');
+      const status = header.querySelector<HTMLElement>('[data-status]');
+      if (!badge) return;
+
+      const originalText = badge.dataset.badgeText ?? badge.textContent ?? '';
+      badge.textContent = 'CALLING...';
+      badge.classList.add('calling');
+      if (status) status.style.visibility = 'hidden';
+
+      window.setTimeout(() => {
+        badge.textContent = originalText;
+        badge.classList.remove('calling');
+        if (status) status.style.visibility = '';
+      }, delaySeconds * 1000 + REVEAL_BUFFER_MS);
+    });
+  }
+</script>
 
 <style>
   .header {
@@ -37,6 +71,10 @@ const { call, status, variant = 'tool', plainLabel } = Astro.props;
 
   .badge.final {
     background: var(--color-success);
+  }
+
+  .badge.calling {
+    animation: pulse 1s ease infinite;
   }
 
   .call {

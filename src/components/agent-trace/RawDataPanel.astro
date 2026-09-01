@@ -1,0 +1,138 @@
+---
+import { site, agent, profile, projects, skills, wins } from '../../data/site';
+
+const rawData = { site, agent, profile, projects, skills, wins };
+const json = JSON.stringify(rawData, null, 2);
+---
+
+<div
+  class="raw-panel"
+  id="raw-panel"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Raw site data"
+  aria-hidden="true"
+  inert
+>
+  <div class="raw-panel-header">
+    <span class="raw-panel-title">GET /api/site-data</span>
+    <button type="button" class="raw-panel-close" id="raw-panel-close" aria-label="Close raw data panel">
+      ×
+    </button>
+  </div>
+  <pre class="raw-panel-body">{json}</pre>
+</div>
+
+<script>
+  const panel = document.getElementById('raw-panel');
+  const closeBtn = document.getElementById('raw-panel-close');
+  let lastFocused: HTMLElement | null = null;
+
+  function isOpen() {
+    return panel?.classList.contains('open') ?? false;
+  }
+
+  function openPanel() {
+    if (!panel) return;
+    lastFocused = document.activeElement as HTMLElement | null;
+    panel.classList.add('open');
+    panel.removeAttribute('inert');
+    panel.setAttribute('aria-hidden', 'false');
+    closeBtn?.focus();
+  }
+
+  function closePanel() {
+    if (!panel) return;
+    panel.classList.remove('open');
+    panel.setAttribute('inert', '');
+    panel.setAttribute('aria-hidden', 'true');
+    lastFocused?.focus();
+  }
+
+  window.addEventListener('keydown', (event) => {
+    const target = event.target as HTMLElement;
+    const isEditable =
+      target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable;
+
+    if (event.key === '`' && !isEditable) {
+      event.preventDefault();
+      if (isOpen()) closePanel();
+      else openPanel();
+    } else if (event.key === 'Escape' && isOpen()) {
+      closePanel();
+    }
+  });
+
+  closeBtn?.addEventListener('click', closePanel);
+</script>
+
+<style>
+  .raw-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: min(480px, 100vw);
+    background: var(--color-surface-alt);
+    border-left: 1px solid var(--color-border-strong);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 100;
+  }
+
+  .raw-panel.open {
+    transform: translateX(0);
+  }
+
+  .raw-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .raw-panel-title {
+    font: 700 12px var(--font-mono);
+    color: var(--color-accent);
+  }
+
+  .raw-panel-close {
+    background: transparent;
+    border: none;
+    color: var(--color-text-dim);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 8px;
+  }
+
+  .raw-panel-close:hover {
+    color: var(--color-accent);
+  }
+
+  .raw-panel-body {
+    flex: 1;
+    overflow: auto;
+    margin: 0;
+    padding: 20px;
+    font: 400 12px/1.6 var(--font-mono);
+    color: var(--color-text-dim);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  @media (max-width: 640px) {
+    .raw-panel {
+      width: 100vw;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .raw-panel {
+      transition: none;
+    }
+  }
+</style>
