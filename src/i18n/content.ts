@@ -283,7 +283,7 @@ export const content = {
     },
     profile: {
       tagline: 'desarrollador fullstack · IA agent builder · bogotá, co',
-      bio: 'Estudiante de ingeniería de sistemas (8vo semestre, U. Libre) que busca los problemas técnicos difíciles: arquitectura hexagonal en AWS, infraestructura como código y pipelines de revisión de PRs asistidos por IA. Actualmente construye aplicaciones bancarias internas en Banco de Bogotá, además de ganar un hackathon en LATAM con una plataforma de agentes de voz con IA.',
+      bio: 'Estudiante de ingeniería de sistemas (8vo semestre, U. Libre) en busca de problemas tecnicos difíciles: arquitectura hexagonal en AWS, infraestructura como código y pipelines de revisión de PRs asistidos por IA. Actualmente construyendo aplicaciones bancarias internas en Banco de Bogotá, ganador de GTM hackathon LATAM con una plataforma de agentes de voz con IA.',
     },
     projects: [
       {
@@ -341,21 +341,21 @@ export const content = {
         emoji: '🏆',
         title: '1er Lugar — Hackathon GTM LATAM',
         description:
-          'Mayo 2026 — ganó el primer hackathon GTM de LATAM con GoTom, compitiendo contra equipos de toda la región.',
+          'Mayo 2026 — gane el primer hackathon GTM de LATAM con GoTom, compitiendo contra equipos de toda la región.',
         highlighted: true,
       },
       {
         emoji: '🥈',
         title: 'Top 2 — Hackathon Banco de Bogotá',
         description:
-          'Jul 2026 — construyó Banca Empresas, un pipeline de ventas impulsado por voz con IA para tarjetas de crédito corporativas, desde el cruce de archivos hasta el seguimiento de entregas.',
+          'Jul 2026 — construimos un pipeline de ventas impulsado por voz con IA para tarjetas de crédito corporativas, desde el cruce de archivos hasta el seguimiento de entregas.',
         highlighted: true,
       },
       {
         emoji: '🏦',
         title: 'Código en producción en un banco importante',
         description:
-          'Ene–Jul 2026 — aplicaciones Angular + Node/TS + AWS llevadas a producción en Banco de Bogotá, mientras cursaba la universidad.',
+          'Ene–Jul 2026 — aplicaciones Angular + Node/TS + AWS llevadas a producción en Banco de Bogotá.',
         highlighted: false,
       },
     ],
@@ -372,7 +372,7 @@ export const content = {
         id: 'recruiter',
         label: 'Reclutador',
         query:
-          '"Encuéntrame un desarrollador fullstack que realmente construya agentes de IA, no que solo hable de ellos."',
+          '"Encuéntrame un desarrollador fullstack que realmente construya agentes de IA"',
         accent: 'contáctalo.',
         body: 'Lleva código a producción, gana hackathons y construye él mismo el stack de agentes. Confianza: 0.98.',
         cta: 'Enviar correo a Thomas →',
