@@ -268,8 +268,8 @@ export const content = {
       copy: 'Copiar',
       copied: 'Copiado',
       copyEmailAriaLabel: (email: string) => `Copiar dirección de correo ${email}`,
-      rawDataAriaLabel: 'Datos crudos del sitio',
-      closeRawDataAriaLabel: 'Cerrar panel de datos',
+      rawDataAriaLabel: 'raw data del sitio',
+      closeRawDataAriaLabel: 'cerrar panel de datos',
       finePrint: (year: number) =>
         `© ${year} thomas jutinico · este portafolio es en sí mismo una traza de agente 🤖`,
       langToggleAriaLabel: 'Cambiar idioma',
@@ -282,7 +282,7 @@ export const content = {
       },
     },
     profile: {
-      tagline: 'desarrollador fullstack · constructor de agentes de ia · bogotá, co',
+      tagline: 'desarrollador fullstack · IA agent builder · bogotá, co',
       bio: 'Estudiante de ingeniería de sistemas (8vo semestre, U. Libre) que busca los problemas técnicos difíciles: arquitectura hexagonal en AWS, infraestructura como código y pipelines de revisión de PRs asistidos por IA. Actualmente construye aplicaciones bancarias internas en Banco de Bogotá, además de ganar un hackathon en LATAM con una plataforma de agentes de voz con IA.',
     },
     projects: [
