@@ -247,7 +247,7 @@ export const content = {
       viewingAsAriaLabel: 'Viendo como',
       commentViewingAs: '// viendo como',
       commentSession: '// sesión',
-      commentTraceSteps: '// pasos de traza',
+      commentTraceSteps: '// traza de pasos',
       commentRawDataHint: '// presiona ` para ver los datos',
       sessionTask: 'tarea:',
       sessionFilters: 'filtros:',
@@ -341,7 +341,7 @@ export const content = {
         emoji: '🏆',
         title: '1er Lugar — Hackathon GTM LATAM',
         description:
-          'Mayo 2026 — gane el primer hackathon GTM de LATAM con GoTom, compitiendo contra equipos de toda la región.',
+          'Mayo 2026 — ganamos el primer hackathon GTM de LATAM con GoTom, compitiendo contra equipos de toda la región.',
         highlighted: true,
       },
       {
@@ -353,7 +353,7 @@ export const content = {
       },
       {
         emoji: '🏦',
-        title: 'Código en producción en un banco importante',
+        title: 'Código en producción en Banco de Bogota',
         description:
           'Ene–Jul 2026 — aplicaciones Angular + Node/TS + AWS llevadas a producción en Banco de Bogotá.',
         highlighted: false,
