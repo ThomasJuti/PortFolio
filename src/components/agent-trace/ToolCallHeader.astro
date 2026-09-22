@@ -1,19 +1,25 @@
 ---
+import { content } from '../../i18n/content';
+
 interface Props {
   call: string;
   status?: string;
   variant?: 'tool' | 'final';
-  plainLabel?: string;
+  plainLabelKey?: keyof typeof content.en.ui.plainLabels;
   resolveDelay?: number;
 }
 
-const { call, status, variant = 'tool', plainLabel, resolveDelay } = Astro.props;
-const badgeText = variant === 'final' ? 'FINAL ANSWER' : 'TOOL CALL';
+const { call, status, variant = 'tool', plainLabelKey, resolveDelay } = Astro.props;
+const badgeText = variant === 'final' ? content.en.toolCalls.final : content.en.toolCalls.tool;
+const plainLabel = plainLabelKey ? content.en.ui.plainLabels[plainLabelKey] : undefined;
+const i18nAttr = plainLabelKey
+  ? `title:ui.plainLabels.${plainLabelKey}|aria-label:ui.plainLabels.${plainLabelKey}`
+  : undefined;
 ---
 
 <div class="header" data-resolve-delay={resolveDelay}>
   <span class:list={['badge', variant]} data-badge data-badge-text={badgeText}>{badgeText}</span>
-  <span class="call" title={plainLabel} aria-label={plainLabel ?? call}>{call}</span>
+  <span class="call" title={plainLabel} aria-label={plainLabel ?? call} data-i18n-attr={i18nAttr}>{call}</span>
   {status && <span class="status" data-status>✓ {status}</span>}
 </div>
 

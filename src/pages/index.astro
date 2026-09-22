@@ -8,10 +8,12 @@ import SkillsStep from '../components/agent-trace/SkillsStep.astro';
 import WinsStep from '../components/agent-trace/WinsStep.astro';
 import RecommendationStep from '../components/agent-trace/RecommendationStep.astro';
 import RawDataPanel from '../components/agent-trace/RawDataPanel.astro';
-import { site } from '../data/site';
+import { content } from '../i18n/content';
+
+const { site, titleSuffix, description } = content.en;
 ---
 
-<BaseLayout title={`${site.name} — Fullstack Developer`} description={site.description}>
+<BaseLayout title={`${site.name} ${titleSuffix}`} description={description}>
   <div class="layout">
     <AgentSidebar />
     <main id="main">

@@ -1,20 +1,22 @@
 ---
-import { skills } from '../../data/site';
+import { content } from '../../i18n/content';
 import ToolCallHeader from './ToolCallHeader.astro';
+
+const { calls, skillGroups } = content.en;
 ---
 
 <section id="step3" class="step" aria-labelledby="step3-heading">
   <ToolCallHeader
-    call={skills.call}
-    status={skills.status}
-    plainLabel="checking skills used in real production code"
+    call={calls.skills}
+    status={calls.skillsStatus}
+    plainLabelKey="checkingSkills"
     resolveDelay={0.3}
   />
-  <h2 id="step3-heading" class="sr-only">Skills</h2>
+  <h2 id="step3-heading" class="sr-only" data-i18n="ui.skillsHeading">Skills</h2>
   <dl class="json">
     <span class="brace" aria-hidden="true">{'{'}</span>
     {
-      skills.groups.map((group) => (
+      skillGroups.map((group) => (
         <div class="entry">
           <dt>"{group.key}"</dt>
           <dd>[{group.items.map((item) => `"${item}"`).join(', ')}]</dd>

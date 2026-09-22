@@ -38,9 +38,27 @@ const ogImageURL = new URL('/og-image.png', Astro.site ?? Astro.url);
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL} />
+
+    <style>
+      /* Hidden until the client-side language detector has run once, to avoid
+         a flash of English text for visitors whose browser is set to Spanish. */
+      html:not([data-i18n-ready]) body {
+        visibility: hidden;
+      }
+    </style>
+    <noscript>
+      <style>
+        body {
+          visibility: visible !important;
+        }
+      </style>
+    </noscript>
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <script>
+      import '../i18n/client';
+    </script>
+    <a class="skip-link" href="#main" data-i18n="ui.skipToContent">Skip to content</a>
     <slot />
   </body>
 </html>

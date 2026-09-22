@@ -1,7 +1,11 @@
 ---
-import { agent, audiences, traceSteps } from '../../data/site';
+import { content } from '../../i18n/content';
+import LanguageToggle from './LanguageToggle.astro';
 
-const current = audiences[0];
+const { agent, audienceMeta, traceSteps } = content.en;
+const enAudiences = content.en.audiences;
+const esAudiences = content.es.audiences;
+const currentIndex = 0;
 ---
 
 <header class="sidebar">
@@ -9,44 +13,57 @@ const current = audiences[0];
     <span class="dot" aria-hidden="true"></span>
     <span class="agent-name">agent: {agent.name}</span>
   </div>
+
+  <LanguageToggle />
+
   <p class="sr-only" id="audience-announcer" role="status" aria-live="polite"></p>
 
-  <div class="viewing-as" role="group" aria-label="Viewing as">
-    <p class="comment" aria-hidden="true">// viewing as</p>
+  <div class="viewing-as" role="group" aria-label="Viewing as" data-i18n-attr="aria-label:ui.viewingAsAriaLabel">
+    <p class="comment" aria-hidden="true" data-i18n="ui.commentViewingAs">// viewing as</p>
     <div class="toggle">
       {
-        audiences.map((audience) => (
-          <button
-            type="button"
-            data-audience={audience.id}
-            data-from={audience.from}
-            data-task={audience.task}
-            data-filters={audience.filters}
-            data-query={audience.query}
-            data-accent={audience.accent}
-            data-body={audience.body}
-            data-cta={audience.cta}
-            aria-pressed={audience.id === current.id ? 'true' : 'false'}
-          >
-            {audience.label}
-          </button>
-        ))
+        audienceMeta.map((meta, index) => {
+          const en = enAudiences[index];
+          const es = esAudiences[index];
+          return (
+            <button
+              type="button"
+              data-audience={meta.id}
+              data-from={meta.from}
+              data-task={meta.task}
+              data-filters={meta.filters}
+              data-label-en={en.label}
+              data-label-es={es.label}
+              data-query-en={en.query}
+              data-query-es={es.query}
+              data-accent-en={en.accent}
+              data-accent-es={es.accent}
+              data-body-en={en.body}
+              data-body-es={es.body}
+              data-cta-en={en.cta}
+              data-cta-es={es.cta}
+              aria-pressed={index === currentIndex ? 'true' : 'false'}
+            >
+              {en.label}
+            </button>
+          );
+        })
       }
     </div>
   </div>
 
   <dl class="session">
-    <p class="comment" aria-hidden="true">// session</p>
-    <div class="row"><dt>task:</dt> <dd id="session-task">{current.task}</dd></div>
-    <div class="row"><dt>filters:</dt> <dd id="session-filters">{current.filters}</dd></div>
-    <div class="row"><dt>region:</dt> <dd>{agent.session.region}</dd></div>
+    <p class="comment" aria-hidden="true" data-i18n="ui.commentSession">// session</p>
+    <div class="row"><dt data-i18n="ui.sessionTask">task:</dt> <dd id="session-task">{audienceMeta[currentIndex].task}</dd></div>
+    <div class="row"><dt data-i18n="ui.sessionFilters">filters:</dt> <dd id="session-filters">{audienceMeta[currentIndex].filters}</dd></div>
+    <div class="row"><dt data-i18n="ui.sessionRegion">region:</dt> <dd>{agent.session.region}</dd></div>
     <div class="row">
-      <dt>status:</dt> <dd class="status-ok">● {agent.session.status}</dd>
+      <dt data-i18n="ui.sessionStatus">status:</dt> <dd class="status-ok">● {agent.session.status}</dd>
     </div>
   </dl>
 
-  <nav aria-label="Trace steps">
-    <p class="comment" aria-hidden="true">// trace steps</p>
+  <nav aria-label="Trace steps" data-i18n-attr="aria-label:ui.traceStepsAriaLabel">
+    <p class="comment" aria-hidden="true" data-i18n="ui.commentTraceSteps">// trace steps</p>
     <ol>
       {
         traceSteps.map((step) => (
@@ -61,19 +78,21 @@ const current = audiences[0];
   <div class="context-group">
     <div class="context">
       <div class="context-label">
-        <span>context</span>
+        <span data-i18n="ui.contextLabel">context</span>
         <span id="context-count">{Math.round((1 / traceSteps.length) * 100)}%</span>
       </div>
-      <div class="context-track" role="progressbar" aria-label="Sections read" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20">
+      <div class="context-track" role="progressbar" aria-label="Sections read" data-i18n-attr="aria-label:ui.sectionsReadAriaLabel" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20">
         <div class="context-fill" id="context-fill"></div>
       </div>
     </div>
 
-    <p class="comment raw-data-hint">// press ` for raw data</p>
+    <p class="comment raw-data-hint" data-i18n="ui.commentRawDataHint">// press ` for raw data</p>
   </div>
 </header>
 
 <script>
+  import { getCurrentLang, onLangChange, content } from '../../i18n/client';
+
   const STORAGE_KEY = 'thomas-portfolio:audience';
 
   const buttons = document.querySelectorAll<HTMLButtonElement>('[data-audience]');
@@ -97,7 +116,15 @@ const current = audiences[0];
   function applyAudience(button: HTMLButtonElement, announce = true) {
     buttons.forEach((other) => other.setAttribute('aria-pressed', String(other === button)));
 
-    const { from, task, filters, query, accent, body, cta } = button.dataset;
+    const lang = getCurrentLang();
+    const { from, task, filters } = button.dataset;
+    const label = lang === 'es' ? button.dataset.labelEs : button.dataset.labelEn;
+    const query = lang === 'es' ? button.dataset.queryEs : button.dataset.queryEn;
+    const accent = lang === 'es' ? button.dataset.accentEs : button.dataset.accentEn;
+    const body = lang === 'es' ? button.dataset.bodyEs : button.dataset.bodyEn;
+    const cta = lang === 'es' ? button.dataset.ctaEs : button.dataset.ctaEn;
+
+    if (label) button.textContent = label;
     if (fromEl && from) fromEl.textContent = from;
     if (taskEl && task) taskEl.textContent = task;
     if (filtersEl && filters) filtersEl.textContent = filters;
@@ -108,7 +135,7 @@ const current = audiences[0];
 
     if (announce) {
       [fromEl, taskEl, filtersEl, queryEl, accentEl, bodyEl, ctaEl].forEach(flash);
-      if (announcerEl) announcerEl.textContent = `Now viewing as: ${button.textContent?.trim()}`;
+      if (announcerEl) announcerEl.textContent = content[lang].ui.nowViewingAs(label ?? button.textContent?.trim() ?? '');
     }
   }
 
@@ -130,7 +157,10 @@ const current = audiences[0];
     });
   });
 
-  // Restore a shared (?as=) or previously-chosen audience on load.
+  // Restore a shared (?as=) or previously-chosen audience on load, and always
+  // re-render text for whichever language was detected — the buttons are
+  // server-rendered in English, so a Spanish-detected visitor needs this
+  // pass even when the audience itself never changes.
   let initialId = new URLSearchParams(window.location.search).get('as');
   if (!initialId) {
     try {
@@ -139,13 +169,17 @@ const current = audiences[0];
       initialId = null;
     }
   }
-  if (initialId) {
-    const match = Array.from(buttons).find((b) => b.dataset.audience === initialId);
-    if (match) {
-      if (match.getAttribute('aria-pressed') !== 'true') applyAudience(match, false);
-      persistAudience(initialId);
-    }
+  const initialButton =
+    (initialId && Array.from(buttons).find((b) => b.dataset.audience === initialId)) || buttons[0];
+  if (initialButton) {
+    applyAudience(initialButton, false);
+    if (initialId) persistAudience(initialId);
   }
+
+  onLangChange(() => {
+    const pressed = Array.from(buttons).find((b) => b.getAttribute('aria-pressed') === 'true');
+    if (pressed) applyAudience(pressed, false);
+  });
 
   // Highlight the trace-step link for whichever step is currently in view.
   const traceLinks = new Map<string, HTMLAnchorElement>();

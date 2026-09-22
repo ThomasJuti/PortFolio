@@ -1,13 +1,14 @@
 ---
-import { audiences } from '../../data/site';
+import { content } from '../../i18n/content';
 
-const current = audiences[0];
+const meta = content.en.audienceMeta[0];
+const query = content.en.audiences[0].query;
 ---
 
 <div class="query">
-  <p class="from" id="query-from">{current.from}</p>
+  <p class="from" id="query-from">{meta.from}</p>
   <p class="bubble">
-    <span id="query-text">{current.query}</span><span class="cursor" aria-hidden="true">▌</span>
+    <span id="query-text">{query}</span><span class="cursor" aria-hidden="true">▌</span>
   </p>
 </div>
 

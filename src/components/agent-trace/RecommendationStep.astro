@@ -1,40 +1,41 @@
 ---
-import { audiences, recommendation, site } from '../../data/site';
+import { content } from '../../i18n/content';
 import ToolCallHeader from './ToolCallHeader.astro';
 
+const { calls, recommendation, audiences, site } = content.en;
 const current = audiences[0];
 const year = new Date().getFullYear();
 ---
 
 <section id="step5" class="step" aria-labelledby="step5-heading">
   <ToolCallHeader
-    call={recommendation.call}
+    call={calls.recommend}
     variant="final"
-    plainLabel="making the call"
+    plainLabelKey="makingCall"
     resolveDelay={0.5}
   />
   <div class="card">
     <ul class="reasoning" id="rec-reasoning" aria-hidden="true">
       <li class="think-line">
-        checking production wins... <span class="check">✓</span>
+        <span data-i18n="recommendation.reasoning.0">{recommendation.reasoning[0]}</span> <span class="check">✓</span>
       </li>
       <li class="think-line">
-        checking real deploys... <span class="check">✓</span>
+        <span data-i18n="recommendation.reasoning.1">{recommendation.reasoning[1]}</span> <span class="check">✓</span>
       </li>
       <li class="think-line">
-        cross-referencing persona filters... <span class="check">✓</span>
+        <span data-i18n="recommendation.reasoning.2">{recommendation.reasoning[2]}</span> <span class="check">✓</span>
       </li>
     </ul>
     <h2 id="step5-heading">
-      {recommendation.headline} <span class="accent" id="rec-accent">{current.accent}</span>
+      <span data-i18n="recommendation.headline">{recommendation.headline}</span> <span class="accent" id="rec-accent">{current.accent}</span>
     </h2>
     <p class="body" id="rec-body">{current.body}</p>
     <div class="actions">
       <a class="btn-primary" href={`mailto:${site.email}`} id="rec-cta">{current.cta}</a>
-      <a class="btn-secondary" href={site.github} target="_blank" rel="noopener noreferrer"
+      <a class="btn-secondary" href={site.github} target="_blank" rel="noopener noreferrer" data-i18n="ui.github"
         >GitHub ↗</a
       >
-      <a class="btn-secondary" href={site.linkedin} target="_blank" rel="noopener noreferrer"
+      <a class="btn-secondary" href={site.linkedin} target="_blank" rel="noopener noreferrer" data-i18n="ui.linkedin"
         >LinkedIn ↗</a
       >
     </div>
@@ -50,13 +51,28 @@ const year = new Date().getFullYear();
       </button>
     </div>
   </div>
-  <p class="fine-print">© {year} thomas jutinico · this portfolio is itself an agent trace 🤖</p>
+  <p class="fine-print" id="fine-print">© {year} thomas jutinico · this portfolio is itself an agent trace 🤖</p>
 </section>
 
 <script>
+  import { getCurrentLang, onLangChange, content } from '../../i18n/client';
+
   const emailText = document.getElementById('rec-email-text');
   const copyBtn = document.getElementById('copy-email-btn');
   const copyLabel = document.getElementById('copy-btn-label');
+  const finePrintEl = document.getElementById('fine-print');
+  const year = new Date().getFullYear();
+  let copied = false;
+
+  function applyLangTexts(lang: 'en' | 'es') {
+    const email = emailText?.textContent?.trim();
+    if (email) copyBtn?.setAttribute('aria-label', content[lang].ui.copyEmailAriaLabel(email));
+    if (copyLabel) copyLabel.textContent = copied ? content[lang].ui.copied : content[lang].ui.copy;
+    if (finePrintEl) finePrintEl.textContent = content[lang].ui.finePrint(year);
+  }
+
+  applyLangTexts(getCurrentLang());
+  onLangChange(applyLangTexts);
 
   copyBtn?.addEventListener('click', async () => {
     const email = emailText?.textContent?.trim();
@@ -64,10 +80,12 @@ const year = new Date().getFullYear();
 
     try {
       await navigator.clipboard.writeText(email);
-      if (copyLabel) copyLabel.textContent = 'Copied';
+      copied = true;
+      applyLangTexts(getCurrentLang());
       copyBtn.setAttribute('data-copied', 'true');
       setTimeout(() => {
-        if (copyLabel) copyLabel.textContent = 'Copy';
+        copied = false;
+        applyLangTexts(getCurrentLang());
         copyBtn.removeAttribute('data-copied');
       }, 2000);
     } catch {

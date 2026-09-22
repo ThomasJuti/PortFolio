@@ -1,19 +1,22 @@
 ---
 import { Image } from 'astro:assets';
 import profileImage from '../../assets/profile.jpg';
-import { profile, site } from '../../data/site';
+import { content } from '../../i18n/content';
 import ToolCallHeader from './ToolCallHeader.astro';
+
+const { site, profile, calls } = content.en;
 ---
 
 <section id="step1" class="step" aria-labelledby="step1-heading">
   <ToolCallHeader
-    call={profile.call}
-    status={profile.status}
-    plainLabel="loading profile"
+    call={calls.profile}
+    status={calls.profileStatus}
+    plainLabelKey="loadingProfile"
     resolveDelay={0.1}
   />
   <div class="card">
     <Image
+      id="profile-photo"
       src={profileImage}
       alt={`Portrait of ${site.name}`}
       width={200}
@@ -24,11 +27,25 @@ import ToolCallHeader from './ToolCallHeader.astro';
     />
     <div>
       <h1 id="step1-heading">{site.name}</h1>
-      <p class="tagline">{profile.tagline}</p>
-      <p class="bio">{profile.bio}</p>
+      <p class="tagline" data-i18n="profile.tagline">{profile.tagline}</p>
+      <p class="bio" data-i18n="profile.bio">{profile.bio}</p>
     </div>
   </div>
 </section>
+
+<script>
+  import { getCurrentLang, onLangChange, content } from '../../i18n/client';
+
+  const img = document.getElementById('profile-photo');
+  const name = content.en.site.name;
+
+  function updateAlt(lang: 'en' | 'es') {
+    img?.setAttribute('alt', content[lang].ui.profileAlt(name));
+  }
+
+  updateAlt(getCurrentLang());
+  onLangChange(updateAlt);
+</script>
 
 <style>
   .step {

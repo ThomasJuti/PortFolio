@@ -1,5 +1,6 @@
 ---
 interface Props {
+  index: number;
   title: string;
   description: string;
   stack: string;
@@ -9,28 +10,28 @@ interface Props {
   layout: 'spotlight' | 'default' | 'wide';
 }
 
-const { title, description, stack, badge, repo, demo, layout } = Astro.props;
+const { index, title, description, stack, badge, repo, demo, layout } = Astro.props;
 ---
 
 <div class:list={['entry', layout]}>
   <div class:list={['heading', { split: Boolean(badge) }]}>
-    <h3>{title}</h3>
-    {badge && <span class="badge">{badge}</span>}
+    <h3 data-i18n={`projects.${index}.title`}>{title}</h3>
+    {badge && <span class="badge" data-i18n={`projects.${index}.badge`}>{badge}</span>}
   </div>
-  <p class="desc">{description}</p>
+  <p class="desc" data-i18n={`projects.${index}.description`}>{description}</p>
   <div class="footer">
-    <p class="stack">{stack}</p>
+    <p class="stack" data-i18n={`projects.${index}.stack`}>{stack}</p>
     <div class="links">
       {
         demo && (
-          <a class="demo-link" href={demo} target="_blank" rel="noopener noreferrer">
+          <a class="demo-link" href={demo} target="_blank" rel="noopener noreferrer" data-i18n="ui.liveDemo">
             Live demo ↗
           </a>
         )
       }
       {
         repo && (
-          <a class="repo-link" href={repo} target="_blank" rel="noopener noreferrer">
+          <a class="repo-link" href={repo} target="_blank" rel="noopener noreferrer" data-i18n="ui.viewRepo">
             View repo ↗
           </a>
         )

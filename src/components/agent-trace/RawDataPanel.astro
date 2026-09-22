@@ -1,7 +1,8 @@
 ---
-import { site, agent, profile, projects, skills, wins } from '../../data/site';
+import { content } from '../../i18n/content';
 
-const rawData = { site, agent, profile, projects, skills, wins };
+const { site, agent, profile, projects, skillGroups, wins, calls, rawDataEndpoint } = content.en;
+const rawData = { site, agent, profile, projects, skills: skillGroups, wins, calls };
 const json = JSON.stringify(rawData, null, 2);
 ---
 
@@ -11,19 +12,37 @@ const json = JSON.stringify(rawData, null, 2);
   role="dialog"
   aria-modal="true"
   aria-label="Raw site data"
+  data-i18n-attr="aria-label:ui.rawDataAriaLabel"
   aria-hidden="true"
   inert
 >
   <div class="raw-panel-header">
-    <span class="raw-panel-title">GET /api/site-data</span>
-    <button type="button" class="raw-panel-close" id="raw-panel-close" aria-label="Close raw data panel">
+    <span class="raw-panel-title">{rawDataEndpoint}</span>
+    <button type="button" class="raw-panel-close" id="raw-panel-close" aria-label="Close raw data panel" data-i18n-attr="aria-label:ui.closeRawDataAriaLabel">
       ×
     </button>
   </div>
-  <pre class="raw-panel-body">{json}</pre>
+  <pre class="raw-panel-body" id="raw-panel-body">{json}</pre>
 </div>
 
 <script>
+  import { getCurrentLang, onLangChange, content } from '../../i18n/client';
+
+  const rawBody = document.getElementById('raw-panel-body');
+
+  function renderRawData(lang: 'en' | 'es') {
+    if (!rawBody) return;
+    const { site, agent, profile, projects, skillGroups, wins, calls } = content[lang];
+    rawBody.textContent = JSON.stringify(
+      { site, agent, profile, projects, skills: skillGroups, wins, calls },
+      null,
+      2
+    );
+  }
+
+  renderRawData(getCurrentLang());
+  onLangChange(renderRawData);
+
   const panel = document.getElementById('raw-panel');
   const closeBtn = document.getElementById('raw-panel-close');
   let lastFocused: HTMLElement | null = null;
