@@ -182,19 +182,19 @@ export const content = {
         emoji: '🏆',
         title: '1st Place — GTM Hackathon LATAM',
         description:
-          "May 2026 — won LATAM's first GTM hackathon with GoTom, against teams from across the region.",
+          "May 2026 — we won LATAM's first GTM hackathon with GoTom, against teams from across the region.",
         highlighted: true,
       },
       {
         emoji: '🥈',
         title: 'Top 2 — Banco de Bogotá Hackathon',
         description:
-          'Jul 2026 — built Banca Empresas, an AI-voice-driven sales pipeline for corporate credit cards, from file matching to delivery follow-up.',
+          'Jul 2026 — built an AI-voice-driven sales pipeline for corporate credit cards, from file matching to delivery follow-up.',
         highlighted: true,
       },
       {
         emoji: '🏦',
-        title: 'Production code at a major bank',
+        title: 'Production code at a Banco de Bogotá',
         description:
           'Jan–Jul 2026 — Angular + Node/TS + AWS apps shipped to production at Banco de Bogotá, while in university.',
         highlighted: false,
