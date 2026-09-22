@@ -1,0 +1,60 @@
+---
+import { content, defaultLang } from '../../i18n/content';
+---
+
+<div class="lang-toggle" role="group" aria-label={content[defaultLang].ui.langToggleAriaLabel} data-i18n-attr="aria-label:ui.langToggleAriaLabel">
+  <button type="button" data-lang="en" aria-pressed="true">EN</button>
+  <button type="button" data-lang="es" aria-pressed="false">ES</button>
+</div>
+
+<script>
+  import { getCurrentLang, onLangChange, changeLang } from '../../i18n/client';
+
+  const root = document.querySelector<HTMLElement>('.lang-toggle');
+  const buttons = root?.querySelectorAll<HTMLButtonElement>('[data-lang]') ?? [];
+
+  function reflect(lang: string) {
+    buttons.forEach((btn) => btn.setAttribute('aria-pressed', String(btn.dataset.lang === lang)));
+  }
+
+  reflect(getCurrentLang());
+  onLangChange(reflect);
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      if (button.dataset.lang === 'en' || button.dataset.lang === 'es') {
+        changeLang(button.dataset.lang);
+      }
+    });
+  });
+</script>
+
+<style>
+  .lang-toggle {
+    display: flex;
+    gap: 4px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 3px;
+  }
+
+  .lang-toggle button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-radius: 5px;
+    color: var(--color-text-dim);
+    font: 700 11px var(--font-mono);
+    padding: 6px 10px;
+    cursor: pointer;
+  }
+
+  .lang-toggle button:hover {
+    color: var(--color-text);
+  }
+
+  .lang-toggle button[aria-pressed='true'] {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+</style>
