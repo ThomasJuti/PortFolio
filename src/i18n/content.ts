@@ -194,7 +194,7 @@ export const content = {
       },
       {
         emoji: '🏦',
-        title: 'Production code at a Banco de Bogotá',
+        title: 'Production code at Banco de Bogotá',
         description:
           'Jan–Jul 2026 — Angular + Node/TS + AWS apps shipped to production at Banco de Bogotá, while in university.',
         highlighted: false,
