@@ -213,7 +213,7 @@ export const content = {
         id: 'recruiter',
         label: 'Recruiter',
         query:
-          '"Find me a fullstack developer who actually builds AI agents — not just talks about them."',
+          '"Find me a fullstack developer who actually builds AI agents and push them to production"',
         accent: 'reach out.',
         body: 'Ships in production, wins hackathons, builds the agent stack himself. Confidence: 0.98.',
         cta: 'Email Thomas →',
