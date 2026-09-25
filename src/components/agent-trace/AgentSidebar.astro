@@ -6,6 +6,7 @@ const { agent, audienceMeta, traceSteps } = content.en;
 const enAudiences = content.en.audiences;
 const esAudiences = content.es.audiences;
 const currentIndex = 0;
+const initialContextPct = Math.round((1 / traceSteps.length) * 100);
 ---
 
 <header class="sidebar">
@@ -79,10 +80,10 @@ const currentIndex = 0;
     <div class="context">
       <div class="context-label">
         <span data-i18n="ui.contextLabel">context</span>
-        <span id="context-count">{Math.round((1 / traceSteps.length) * 100)}%</span>
+        <span id="context-count">{initialContextPct}%</span>
       </div>
-      <div class="context-track" role="progressbar" aria-label="Sections read" data-i18n-attr="aria-label:ui.sectionsReadAriaLabel" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20">
-        <div class="context-fill" id="context-fill"></div>
+      <div class="context-track" role="progressbar" aria-label="Sections read" data-i18n-attr="aria-label:ui.sectionsReadAriaLabel" aria-valuemin="0" aria-valuemax="100" aria-valuenow={initialContextPct}>
+        <div class="context-fill" id="context-fill" style={`width: ${initialContextPct}%`}></div>
       </div>
     </div>
 
