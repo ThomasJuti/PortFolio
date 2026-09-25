@@ -45,7 +45,7 @@ const shared = {
     profile: 'fetch_profile("thomas-jutinico")',
     profileStatus: '200 OK',
     projectsSpotlight: 'list_projects(sort="impact")',
-    projectsSpotlightStatus: '5 results',
+    projectsSpotlightStatus: '6 results',
     skills: 'scan_skills(depth="production")',
     skillsStatus: 'verified in prod',
     wins: 'verify_wins()',
@@ -139,6 +139,16 @@ export const content = {
       },
       {
         layout: 'wide',
+        badge: '🤖 Built for people and agents',
+        title: 'Pemie — AI-native Project Management',
+        description:
+          "AI-native project management — MCP server for autonomous agents to manage boards, user stories, and commits. Every progress report cites the exact commit behind it.",
+        stack: 'ai agents · typescript · mcp',
+        repo: 'https://github.com/lowkeygotom/pemie.ai' as string | undefined,
+        demo: 'https://pemieai.vercel.app' as string | undefined,
+      },
+      {
+        layout: 'wide',
         badge: '🤖 AI-reviewed PRs · rules + Gemini',
         title: 'LifeCicleApp — Customer Management Console',
         description:
@@ -169,12 +179,12 @@ export const content = {
       {
         layout: 'default',
         badge: undefined as string | undefined,
-        title: 'BikeTracking — Maintenance Predictor',
+        title: 'EcoPunto IA — E-Waste Recycling',
         description:
-          'Registers motorcycles, logs maintenance and predicts upcoming service from usage patterns, benchmarking against similar vehicles.',
-        stack: 'angular · nestjs · mysql',
-        repo: 'https://github.com/ThomasJuti/BikeTracking' as string | undefined,
-        demo: undefined as string | undefined,
+          'Old electronics often end up in the trash because nobody knows what to do with them. Snap a photo and Gemini teaches you to reuse, repair or recycle it, and shows where to take it in Bogotá.',
+        stack: 'next.js · supabase · gemini · web app',
+        repo: 'https://github.com/ThomasJuti/EcoPuntoAI' as string | undefined,
+        demo: 'https://ecopuntoai.vercel.app' as string | undefined,
       },
     ],
     wins: [
@@ -298,6 +308,16 @@ export const content = {
       },
       {
         layout: 'wide',
+        badge: '🤖 Para personas y agentes',
+        title: 'Pemie — Gestión de Proyectos AI-native',
+        description:
+          "Gestión de proyectos AI-native — servidor MCP para que agentes autónomos gestionen tableros, historias de usuario y commits. Cada reporte de avance cita el commit exacto que lo respalda.",
+        stack: 'ai agents · typescript · mcp',
+        repo: 'https://github.com/lowkeygotom/pemie.ai' as string | undefined,
+        demo: 'https://pemieai.vercel.app' as string | undefined,
+      },
+      {
+        layout: 'wide',
         badge: '🤖 PRs revisados por IA · reglas + Gemini',
         title: 'LifeCicleApp — Consola de Gestión de Clientes',
         description:
@@ -328,12 +348,12 @@ export const content = {
       {
         layout: 'default',
         badge: undefined as string | undefined,
-        title: 'BikeTracking — Predictor de Mantenimiento',
+        title: 'EcoPunto IA — Reciclaje Electrónico',
         description:
-          'Registra motocicletas, lleva el historial de mantenimiento y predice el próximo servicio según patrones de uso, comparando con vehículos similares.',
-        stack: 'angular · nestjs · mysql',
-        repo: 'https://github.com/ThomasJuti/BikeTracking' as string | undefined,
-        demo: undefined as string | undefined,
+          'Los electrónicos viejos terminan en la basura porque nadie sabe qué hacer con ellos. Toma una foto y Gemini te enseña a reusarlo, repararlo o reciclarlo, y te muestra dónde llevarlo en Bogotá.',
+        stack: 'next.js · supabase · gemini · web app',
+        repo: 'https://github.com/ThomasJuti/EcoPuntoAI' as string | undefined,
+        demo: 'https://ecopuntoai.vercel.app' as string | undefined,
       },
     ],
     wins: [
